@@ -1,0 +1,2130 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0a0a0f">
+    <title>🔥 STAR GAMER - Free Fire Friend Manager</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ====== RESET & BASE ====== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        :root {
+            --primary: #ff4444;
+            --primary-dark: #cc0000;
+            --secondary: #0a0a0f;
+            --accent: #ffaa00;
+            --background: #0a0a0f;
+            --card-bg: rgba(20, 20, 30, 0.95);
+            --text: #ffffff;
+            --text-muted: #b0b0ff;
+            --success: #00ff88;
+            --warning: #ffaa00;
+            --error: #ff4444;
+            --info: #00aaff;
+            --glass: rgba(255, 255, 255, 0.05);
+            --neon-glow: 0 0 15px rgba(255, 68, 68, 0.7);
+            --neon-glow-accent: 0 0 15px rgba(255, 170, 0, 0.7);
+            --safe-area-top: env(safe-area-inset-top, 0px);
+            --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        html {
+            font-size: 16px;
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            overflow-x: hidden;
+            padding: var(--safe-area-top) 0 var(--safe-area-bottom) 0;
+            position: relative;
+        }
+
+        /* ====== BACKGROUND ====== */
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+
+        .bg-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 68, 68, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(255, 170, 0, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 40% 80%, rgba(0, 255, 136, 0.1) 0%, transparent 30%),
+                linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+            z-index: -1;
+        }
+
+        /* ====== LOADING SCREEN ====== */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--background);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+            box-shadow: var(--neon-glow);
+        }
+
+        .loading-logo i {
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+
+        .loading-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ff0000, #ff8800, #ffaa00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .loading-subtext {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-align: center;
+            max-width: 300px;
+            line-height: 1.5;
+        }
+
+        /* ====== MAIN CONTAINER ====== */
+        .main-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px;
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .main-container {
+                padding: 20px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .main-container {
+                padding: 30px;
+            }
+        }
+
+        /* ====== MOBILE FIXES ====== */
+        @media screen and (max-width: 768px) {
+            .main-container {
+                padding: 10px !important;
+            }
+            
+            .header {
+                padding: 15px !important;
+            }
+            
+            .logo {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px !important;
+            }
+            
+            .main-title {
+                font-size: 1.5rem !important;
+                line-height: 1.3 !important;
+            }
+            
+            .token-type-selector {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 8px !important;
+            }
+            
+            .token-type-btn {
+                padding: 12px 8px !important;
+                font-size: 0.8rem !important;
+            }
+            
+            .token-type-btn i {
+                font-size: 1.1rem !important;
+            }
+            
+            .token-input {
+                min-height: 80px !important;
+                font-size: 14px !important;
+            }
+            
+            .btn {
+                padding: 12px 15px !important;
+                font-size: 0.9rem !important;
+            }
+            
+            .tab-btn {
+                min-width: 90px !important;
+                padding: 10px !important;
+                font-size: 0.75rem !important;
+            }
+            
+            .account-info {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 8px !important;
+            }
+            
+            .info-card {
+                padding: 12px !important;
+            }
+            
+            .friends-list {
+                grid-template-columns: 1fr !important;
+                gap: 10px !important;
+            }
+            
+            .form-input, .form-select {
+                padding: 12px !important;
+            }
+        }
+
+        /* Small phones */
+        @media screen and (max-width: 360px) {
+            .main-title {
+                font-size: 1.3rem !important;
+            }
+            
+            .token-type-selector {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .account-info {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .token-actions {
+                flex-direction: column;
+            }
+        }
+
+        /* iOS specific fixes */
+        @supports (-webkit-touch-callout: none) {
+            body {
+                min-height: -webkit-fill-available;
+            }
+            
+            input, textarea {
+                font-size: 16px !important;
+            }
+            
+            .btn, .token-type-btn, .tab-btn {
+                cursor: pointer;
+                -webkit-tap-highlight-color: transparent;
+            }
+        }
+
+        /* Android Chrome fixes */
+        @media screen and (-webkit-min-device-pixel-ratio: 0) {
+            select, textarea, input {
+                font-size: 16px !important;
+            }
+        }
+
+        /* Touch device improvements */
+        @media (hover: none) and (pointer: coarse) {
+            .btn:hover, .token-type-btn:hover, .tab-btn:hover {
+                transform: none !important;
+            }
+            
+            .btn:active, .token-type-btn:active, .tab-btn:active {
+                transform: scale(0.98) !important;
+            }
+            
+            .friend-card:hover {
+                transform: none !important;
+            }
+            
+            .friend-card:active {
+                transform: scale(0.99) !important;
+            }
+        }
+
+        /* ====== HEADER ====== */
+        .header {
+            text-align: center;
+            padding: 20px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 68, 68, 0.2);
+            box-shadow: var(--neon-glow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--primary), var(--accent), var(--primary));
+            border-radius: 20px;
+            z-index: -1;
+            animation: borderGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes borderGlow {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            min-width: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            box-shadow: var(--neon-glow);
+        }
+
+        .logo-text {
+            text-align: center;
+        }
+
+        .main-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #ff0000, #ff8800, #ffaa00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+        }
+
+        @media (min-width: 768px) {
+            .main-title {
+                font-size: 2.2rem;
+            }
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 5px;
+            font-weight: 300;
+        }
+
+        .developer-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(255, 170, 0, 0.15);
+            border: 1px solid rgba(255, 170, 0, 0.3);
+            border-radius: 20px;
+            color: var(--accent);
+            font-size: 0.85rem;
+            margin-top: 10px;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .developer-tag:hover {
+            background: rgba(255, 170, 0, 0.25);
+            transform: translateY(-2px);
+            box-shadow: var(--neon-glow-accent);
+        }
+
+        /* ====== TOKEN SECTION ====== */
+        .token-section {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--glass);
+            backdrop-filter: blur(10px);
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary);
+        }
+
+        /* Token Type Selector */
+        .token-type-selector {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        @media (min-width: 768px) {
+            .token-type-selector {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .token-type-btn {
+            padding: 15px 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 68, 68, 0.3);
+            border-radius: 12px;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Exo 2', sans-serif;
+        }
+
+        .token-type-btn:hover {
+            background: rgba(255, 68, 68, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .token-type-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-color: var(--primary);
+            color: white;
+            box-shadow: var(--neon-glow);
+            transform: translateY(-2px);
+        }
+
+        .token-type-btn i {
+            font-size: 1.3rem;
+        }
+
+        .token-type-btn span {
+            font-size: 0.85rem;
+        }
+
+        /* Token Input */
+        .token-input-container {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .token-input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 68, 68, 0.3);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 1rem;
+            font-family: 'Exo 2', sans-serif;
+            transition: all 0.3s;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .token-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 68, 68, 0.2);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .token-info {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Token Actions */
+        .token-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            flex: 1;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s;
+        }
+
+        .btn:hover::after {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 68, 68, 0.4);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: var(--neon-glow);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--error), #cc0000);
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 68, 68, 0.4);
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(255, 68, 68, 0.7);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #00cc66);
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.4);
+        }
+
+        .btn-success:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.7);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, var(--info), #0088ff);
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 170, 255, 0.4);
+        }
+
+        .btn-info:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(0, 170, 255, 0.7);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* ====== TABS ====== */
+        .tabs-container {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid var(--glass);
+            backdrop-filter: blur(10px);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .tabs::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .tabs::-webkit-scrollbar-track {
+            background: var(--glass);
+            border-radius: 10px;
+        }
+
+        .tabs::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-weight: 700;
+            font-family: 'Orbitron', sans-serif;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 68, 68, 0.1);
+            color: var(--text);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-color: var(--primary);
+            color: white;
+            box-shadow: var(--neon-glow);
+        }
+
+        .tab-btn i {
+            font-size: 1.1rem;
+        }
+
+        .tab-btn span {
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 480px) {
+            .tab-btn {
+                min-width: 100px;
+                padding: 10px 12px;
+                font-size: 0.8rem;
+            }
+            
+            .tab-btn i {
+                font-size: 1rem;
+            }
+        }
+
+        /* ====== TAB CONTENT ====== */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ====== FORMS ====== */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 68, 68, 0.3);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-family: 'Exo 2', sans-serif;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 68, 68, 0.2);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        @media (min-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* ====== MESSAGES ====== */
+        .message {
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            animation: slideIn 0.4s ease;
+            backdrop-filter: blur(10px);
+            font-family: 'Exo 2', sans-serif;
+            display: none;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .message.success {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.12), rgba(0, 0, 0, 0.3));
+            border: 2px solid var(--success);
+            color: var(--success);
+        }
+
+        .message.error {
+            background: linear-gradient(135deg, rgba(255, 68, 68, 0.12), rgba(0, 0, 0, 0.3));
+            border: 2px solid var(--error);
+            color: var(--error);
+        }
+
+        .message.warning {
+            background: linear-gradient(135deg, rgba(255, 170, 0, 0.12), rgba(0, 0, 0, 0.3));
+            border: 2px solid var(--warning);
+            color: var(--warning);
+        }
+
+        .message.info {
+            background: linear-gradient(135deg, rgba(0, 170, 255, 0.12), rgba(0, 0, 0, 0.3));
+            border: 2px solid var(--info);
+            color: var(--info);
+        }
+
+        /* ====== LOADING ====== */
+        .loading {
+            text-align: center;
+            padding: 30px;
+            display: none;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            margin: 15px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--glass);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ====== RESULTS SECTION ====== */
+        .results-section {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid var(--glass);
+            backdrop-filter: blur(10px);
+            display: none;
+        }
+
+        /* Account Info */
+        .account-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .account-info {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 15px;
+            }
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, rgba(255, 68, 68, 0.1), rgba(0, 0, 0, 0.3));
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+            transition: transform 0.3s;
+        }
+
+        .info-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .info-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .info-value {
+            font-size: 1rem;
+            font-weight: 700;
+            word-break: break-all;
+            color: var(--text);
+        }
+
+        /* Friends List */
+        .friends-list-container {
+            margin-top: 20px;
+        }
+
+        .friends-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .friends-count {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .friends-list {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 12px;
+        }
+
+        @media (min-width: 768px) {
+            .friends-list {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .friends-list {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .friend-card {
+            background: linear-gradient(135deg, rgba(30, 30, 45, 0.95), rgba(20, 20, 35, 0.95));
+            border-radius: 15px;
+            padding: 15px;
+            border: 2px solid rgba(255, 68, 68, 0.25);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .friend-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .friend-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(255, 68, 68, 0.25), var(--neon-glow);
+        }
+
+        .friend-card:hover::before {
+            opacity: 1;
+        }
+
+        .friend-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .friend-uid {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--accent);
+            background: rgba(255, 170, 0, 0.1);
+            padding: 4px 10px;
+            border-radius: 15px;
+        }
+
+        .friend-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text);
+            line-height: 1.3;
+        }
+
+        .friend-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .friend-action-btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex: 1;
+        }
+
+        /* No Friends Message */
+        .no-friends {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+        }
+
+        .no-friends-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        /* ====== INSTRUCTIONS ====== */
+        .instructions-container {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid var(--glass);
+            backdrop-filter: blur(10px);
+        }
+
+        .instruction-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 68, 68, 0.2);
+        }
+
+        .instruction-step:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .step-number {
+            width: 35px;
+            height: 35px;
+            min-width: 35px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            box-shadow: var(--neon-glow);
+        }
+
+        .step-content h3 {
+            color: var(--text);
+            margin-bottom: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+        }
+
+        .step-content p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .step-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            background: rgba(255, 68, 68, 0.12);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            border-radius: 10px;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 5px;
+            font-size: 0.85rem;
+        }
+
+        .step-link:hover {
+            background: rgba(255, 68, 68, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Links Grid */
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .links-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .link-card {
+            background: linear-gradient(135deg, rgba(255, 68, 68, 0.1), rgba(0, 0, 0, 0.3));
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 68, 68, 0.2);
+            text-align: center;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .link-card:hover {
+            background: linear-gradient(135deg, rgba(255, 68, 68, 0.2), rgba(0, 0, 0, 0.4));
+            transform: translateY(-3px);
+            border-color: var(--primary);
+        }
+
+        .link-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .link-title {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            margin-bottom: 5px;
+            font-size: 1rem;
+        }
+
+        .link-description {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            line-height: 1.5;
+        }
+
+        /* ====== FOOTER ====== */
+        .footer {
+            text-align: center;
+            padding: 25px 20px;
+            margin-top: 30px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(255, 68, 68, 0.2);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+        }
+
+        .footer-link:hover {
+            color: var(--primary);
+        }
+
+        /* ====== OPERATION STATUS ====== */
+        .operation-status {
+            position: fixed;
+            top: 20px;
+            right: 15px;
+            z-index: 9999;
+            max-width: calc(100% - 30px);
+            width: 350px;
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            .operation-status {
+                top: 15px;
+                right: 15px;
+                left: 15px;
+                width: auto;
+                max-width: none;
+            }
+        }
+
+        .status-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            border: 2px solid;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            animation: slideInRight 0.4s ease;
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .status-success {
+            border-color: var(--success);
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), var(--card-bg));
+        }
+
+        .status-error {
+            border-color: var(--error);
+            background: linear-gradient(135deg, rgba(255, 68, 68, 0.1), var(--card-bg));
+        }
+
+        .status-processing {
+            border-color: var(--accent);
+            background: linear-gradient(135deg, rgba(255, 170, 0, 0.1), var(--card-bg));
+        }
+
+        .status-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+
+        .status-message {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* ====== SCROLLBAR ====== */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+        }
+
+        /* ====== UTILITY CLASSES ====== */
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-1 { margin-top: 5px; }
+        .mt-2 { margin-top: 10px; }
+        .mt-3 { margin-top: 15px; }
+        .mt-4 { margin-top: 20px; }
+        .mt-5 { margin-top: 25px; }
+
+        .mb-1 { margin-bottom: 5px; }
+        .mb-2 { margin-bottom: 10px; }
+        .mb-3 { margin-bottom: 15px; }
+        .mb-4 { margin-bottom: 20px; }
+        .mb-5 { margin-bottom: 25px; }
+    </style>
+</head>
+<body>
+    <!-- Background -->
+    <div class="background-container">
+        <div class="bg-gradient"></div>
+    </div>
+
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-logo">
+            <i class="fas fa-users"></i>
+        </div>
+        <div class="loading-text">Star gamer - FRIEND MANAGER</div>
+        <div class="loading-subtext">Loading advanced friend management system...</div>
+    </div>
+
+    <!-- Operation Status -->
+    <div class="operation-status" id="operationStatus"></div>
+
+    <!-- Main Container -->
+    <div class="main-container" id="mainContainer">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="logo-text">
+                    <div class="main-title">STAR GAMER  FRIEND MANAGER</div>
+                    <div class="subtitle">Advanced Free Fire Friend Management System</div>
+                </div>
+            </div>
+            <a href="https://t.me/STAR_METHODE" target="_blank" class="developer-tag">
+                <i class="fab fa-telegram"></i> DEVELOPER: @STAR_RDP
+            </a>
+        </div>
+
+        <!-- Authentication Section -->
+        <div class="token-section">
+            <div class="section-title">
+                <i class="fas fa-key"></i> AUTHENTICATION
+            </div>
+            
+            <div class="token-type-selector">
+                <button type="button" class="token-type-btn active" data-type="token">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>JWT Token</span>
+                </button>
+                <button type="button" class="token-type-btn" data-type="access_token">
+                    <i class="fas fa-ticket-alt"></i>
+                    <span>Access Token</span>
+                </button>
+                <button type="button" class="token-type-btn" data-type="eat_token">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span>EAT Token</span>
+                </button>
+                <button type="button" class="token-type-btn" data-type="uid_password">
+                    <i class="fas fa-user-lock"></i>
+                    <span>UID:Password</span>
+                </button>
+            </div>
+            
+            <div class="token-input-container">
+                <textarea class="token-input" id="userToken" 
+                          placeholder="Paste your JWT token here..."></textarea>
+                <div class="token-info">
+                    <i class="fas fa-info-circle"></i> Token is processed locally and never stored
+                </div>
+            </div>
+            
+            <div class="token-actions">
+                <button type="button" class="btn btn-primary" id="loginBtn">
+                    <i class="fas fa-sign-in-alt"></i> AUTHENTICATE
+                </button>
+                <button type="button" class="btn btn-danger" id="clearBtn">
+                    <i class="fas fa-trash"></i> CLEAR
+                </button>
+            </div>
+            
+            <div class="loading" id="tokenLoading">
+                <div class="spinner"></div>
+                <div>Processing authentication...</div>
+            </div>
+            
+            <div class="message" id="tokenMessage"></div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs-container">
+            <div class="tabs">
+                <button type="button" class="tab-btn active" data-tab="manage">
+                    <i class="fas fa-user-friends"></i>
+                    <span>Friend Management</span>
+                </button>
+                <button type="button" class="tab-btn" data-tab="friends">
+                    <i class="fas fa-list"></i>
+                    <span>Friend List</span>
+                </button>
+                <button type="button" class="tab-btn" data-tab="instructions">
+                    <i class="fas fa-book"></i>
+                    <span>Instructions</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Tab Contents -->
+        <div class="tab-content active" id="manageTab">
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-gamepad"></i> Friend UID
+                    </label>
+                    <input type="text" class="form-input" id="friendUid" 
+                           placeholder="Enter target UID">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-bullseye"></i> Action
+                    </label>
+                    <select class="form-select" id="actionType">
+                        <option value="add">Send Friend Request</option>
+                        <option value="remove">Remove Friend</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button type="button" class="btn btn-primary" id="processBtn">
+                <i class="fas fa-play"></i> EXECUTE ACTION
+            </button>
+            
+            <div class="loading" id="processLoading">
+                <div class="spinner"></div>
+                <div>Processing your request...</div>
+            </div>
+            
+            <div class="message" id="processMessage"></div>
+            
+            <div class="results-section" id="processResults">
+                <div class="account-info" id="processAccountInfo"></div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="friendsTab">
+            <button type="button" class="btn btn-info" id="loadFriendsBtn">
+                <i class="fas fa-sync"></i> LOAD FRIEND LIST
+            </button>
+            
+            <div class="loading" id="friendsLoading">
+                <div class="spinner"></div>
+                <div>Loading your friend list...</div>
+            </div>
+            
+            <div class="message" id="friendsMessage"></div>
+            
+            <div class="results-section" id="friendsResults">
+                <div class="account-info" id="friendsAccountInfo"></div>
+                
+                <div class="friends-list-container">
+                    <div class="friends-list-header">
+                        <div class="section-title">
+                            <i class="fas fa-user-friends"></i> YOUR FRIENDS
+                        </div>
+                        <div class="friends-count" id="friendsCount">
+                            <i class="fas fa-users"></i> <span id="friendsCountValue">0</span> friends
+                        </div>
+                    </div>
+                    
+                    <div class="friends-list" id="friendsList"></div>
+                    
+                    <div class="no-friends" id="noFriends" style="display: none;">
+                        <div class="no-friends-icon">
+                            <i class="fas fa-user-slash"></i>
+                        </div>
+                        <h3>No Friends Found</h3>
+                        <p>Start adding friends using the Friend Management tab</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="instructionsTab">
+            <div class="instructions-container">
+                <div class="instruction-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Get Your EAT Token</h3>
+                        <p>Watch this video tutorial to learn how to get your EAT token :</p>
+                        <a href="https://youtu.be/0blgyEgXE48" target="_blank" class="step-link">
+                            <i class="fab fa-youtube"></i> Watch Tutorial Video
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="instruction-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Use Telegram Bot for Conversion</h3>
+                        <p>Convert your EAT token to JWT token easily using our official Telegram bot:</p>
+                        <a href="https://t.me/danger_helper_robot" target="_blank" class="step-link">
+                            <i class="fab fa-telegram"></i> Open @danger_helper_robot
+                        </a>
+                        <p>The bot also supports UID:Password and Access Token conversion</p>
+                    </div>
+                </div>
+                
+                <div class="instruction-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Use the Friend Manager</h3>
+                        <p>Paste your JWT token (from step 2) in the authentication section above.</p>
+                        <p>You can then:</p>
+                        <ul style="color: var(--text-muted); padding-left: 20px; margin-top: 8px; font-size: 0.9rem;">
+                            <li>Send friend requests to any UID</li>
+                            <li>Remove friends from your list</li>
+                            <li>View all your current friends</li>
+                            <li>Remove friends directly from the list</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="links-grid">
+                    <a href="https://t.me/STAR_METHODE" target="_blank" class="link-card">
+                        <div class="link-icon">
+                            <i class="fab fa-telegram"></i>
+                        </div>
+                        <div class="link-title">Main Channel</div>
+                        <div class="link-description">@STAR_METHODE - Free Fire updates and tips</div>
+                    </a>
+                    
+                    <a href="https://t.me/STAR_METHODE" target="_blank" class="link-card">
+                        <div class="link-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="link-title">APIs Channel</div>
+                        <div class="link-description">@STAR_METHODE - API documentation</div>
+                    </a>
+                    
+                    <a href="https://youtube.com/@STAR_METHODE" target="_blank" class="link-card">
+                        <div class="link-icon">
+                            <i class="fab fa-youtube"></i>
+                        </div>
+                        <div class="link-title">YouTube</div>
+                        <div class="link-description">@STAR_METHODE - Video tutorials</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div>© 2026 STAR_METHODE - Free Fire Friend Manager v4.0</div>
+            <div>Advanced Friend Management System | Auto-detect Region | No Token Storage</div>
+            <div class="footer-links">
+                <a href="https://t.me/STAR_METHODE" target="_blank" class="footer-link">
+                    <i class="fab fa-telegram"></i> Developer
+                </a>
+                <a href="https://t.me/STAR_METHODE" target="_blank" class="footer-link">
+                    <i class="fab fa-telegram"></i> Main Channel
+                </a>
+                <a href="https://t.me/STAR_METHODE" target="_blank" class="footer-link">
+                    <i class="fas fa-code"></i> APIs Channel
+                </a>
+                <a href="/health" target="_blank" class="footer-link">
+                    <i class="fas fa-heartbeat"></i> Health Check
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // ====== SYSTEM VARIABLES ======
+    let currentJWT = null;
+    let currentUserInfo = null;
+    let currentFriends = [];
+    let currentTokenType = 'token';
+    
+    // Define platform and region maps
+    const PLATFORM_MAP = {"3": {"name": "Facebook", "icon": "fab fa-facebook", "color": "#1877F2"}, "4": {"name": "Guest", "icon": "fas fa-user", "color": "#6c757d"}, "5": {"name": "VK", "icon": "fab fa-vk", "color": "#4C75A3"}, "8": {"name": "Google", "icon": "fab fa-google", "color": "#DB4437"}, "10": {"name": "Apple", "icon": "fab fa-apple", "color": "#000000"}, "11": {"name": "Twitter/X", "icon": "fab fa-twitter", "color": "#1DA1F2"}};
+    const REGION_CONFIGS = {"ind": {"url": "https://client.ind.freefiremobile.com", "host": "client.ind.freefiremobile.com", "name": "INDIA"}, "us": {"url": "https://client.us.freefiremobile.com", "host": "client.us.freefiremobile.com", "name": "USA/BRAZIL"}, "default": {"url": "https://clientbp.ggpolarbear.com", "host": "clientbp.common.ggbluefox.com", "name": "INTERNATIONAL"}};
+    
+    // ====== INITIALIZATION ======
+    document.addEventListener('DOMContentLoaded', function() {
+        // Clear any stored data
+        localStorage.removeItem('danger_friend_jwt');
+        localStorage.removeItem('danger_user_info');
+        
+        // Hide loading screen after 1.5 seconds
+        setTimeout(() => {
+            document.getElementById('loadingScreen').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('loadingScreen').style.display = 'none';
+                document.getElementById('mainContainer').style.display = 'block';
+            }, 500);
+        }, 1500);
+        
+        // Setup event listeners
+        setupEventListeners();
+    });
+    
+    // ====== SETUP EVENT LISTENERS ======
+    function setupEventListeners() {
+        // Token type selection
+        document.querySelectorAll('.token-type-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.token-type-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentTokenType = this.getAttribute('data-type');
+                
+                // Update placeholder
+                const placeholders = {
+                    'token': 'Paste your JWT token here...',
+                    'access_token': 'Paste your Access Token here...',
+                    'eat_token': 'Paste your EAT Token here...',
+                    'uid_password': 'Enter UID:Password (e.g., 12345678:mypassword123)...'
+                };
+                
+                document.getElementById('userToken').placeholder = placeholders[currentTokenType];
+            });
+        });
+        
+        // Tab switching
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                // Update active tab
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show active content
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                document.getElementById(tabId + 'Tab').classList.add('active');
+                
+                // Load friends if friends tab is selected and we have JWT
+                if (tabId === 'friends' && currentJWT) {
+                    setTimeout(() => {
+                        loadFriends();
+                    }, 300);
+                }
+            });
+        });
+        
+        // Authentication button
+        document.getElementById('loginBtn').addEventListener('click', authenticateUser);
+        
+        // Clear button
+        document.getElementById('clearBtn').addEventListener('click', clearAll);
+        
+        // Process action button
+        document.getElementById('processBtn').addEventListener('click', processFriendAction);
+        
+        // Load friends button
+        document.getElementById('loadFriendsBtn').addEventListener('click', loadFriends);
+        
+        // Enter key for authentication
+        document.getElementById('userToken').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                authenticateUser();
+            }
+        });
+        
+        // Enter key for friend UID
+        document.getElementById('friendUid').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                processFriendAction();
+            }
+        });
+    }
+    
+    // ====== AUTHENTICATE USER ======
+    async function authenticateUser() {
+        const token = document.getElementById('userToken').value.trim();
+        
+        if (!token) {
+            showMessage('tokenMessage', 'error', 'Please enter your authentication token');
+            return;
+        }
+        
+        const btn = document.getElementById('loginBtn');
+        const loading = document.getElementById('tokenLoading');
+        const message = document.getElementById('tokenMessage');
+        
+        btn.disabled = true;
+        loading.style.display = 'block';
+        message.style.display = 'none';
+        
+        try {
+            // Process token through API
+            const baseUrl = window.location.origin;
+            const response = await fetch(`${baseUrl}/api/process-token`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    token: token,
+                    token_type: currentTokenType
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                currentJWT = data.jwt_token;
+                currentUserInfo = data;
+                
+                showMessage('tokenMessage', 'success', 
+                    `✅ Authenticated successfully! Welcome ${data.nickname || 'Player'} (${data.your_uid})`);
+                
+                showOperationStatus('success', 'Authenticated', 
+                    `Welcome ${data.nickname || 'Player'}! You can now manage your friends.`);
+                
+                // If on friends tab, load friends
+                if (document.querySelector('.tab-btn[data-tab="friends"]').classList.contains('active')) {
+                    setTimeout(() => {
+                        loadFriends();
+                    }, 1000);
+                }
+            } else {
+                showMessage('tokenMessage', 'error', data.error || 'Authentication failed');
+                currentJWT = null;
+                currentUserInfo = null;
+            }
+        } catch (error) {
+            console.error('Authentication error:', error);
+            showMessage('tokenMessage', 'error', 
+                `Network error: ${error.message}. Please check server connection.`);
+        } finally {
+            btn.disabled = false;
+            loading.style.display = 'none';
+        }
+    }
+    
+    // ====== GET PLAYER INFO ======
+    async function getPlayerInfo(targetUid) {
+        if (!currentJWT) {
+            return {
+                success: false,
+                error: 'Please authenticate first'
+            };
+        }
+        
+        try {
+            const baseUrl = window.location.origin;
+            const response = await fetch(
+                `${baseUrl}/api/get-player-info?token=${encodeURIComponent(currentJWT)}&uid=${targetUid}`
+            );
+            
+            if (!response.ok) {
+                throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+            }
+            
+            const data = await response.json();
+            return data;
+            
+        } catch (error) {
+            console.error('Get player info error:', error);
+            return {
+                success: false,
+                error: `Network error: ${error.message}`
+            };
+        }
+    }
+    
+    // ====== LOAD FRIENDS LIST ======
+    async function loadFriends() {
+        if (!currentJWT) {
+            showMessage('friendsMessage', 'error', 'Please authenticate first');
+            return;
+        }
+        
+        const btn = document.getElementById('loadFriendsBtn');
+        const loading = document.getElementById('friendsLoading');
+        const message = document.getElementById('friendsMessage');
+        const results = document.getElementById('friendsResults');
+        
+        btn.disabled = true;
+        loading.style.display = 'block';
+        message.style.display = 'none';
+        results.style.display = 'none';
+        
+        try {
+            const baseUrl = window.location.origin;
+            const response = await fetch(
+                `${baseUrl}/get_friends_list?token=${encodeURIComponent(currentJWT)}`
+            );
+            
+            if (!response.ok) {
+                throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                currentFriends = data.friends || [];
+                
+                // Display account info
+                displayAccountInfo('friendsAccountInfo', data);
+                
+                // Display friends count
+                document.getElementById('friendsCountValue').textContent = data.total_friends;
+                
+                // Display friends list
+                displayFriendsList(data.friends);
+                
+                results.style.display = 'block';
+                
+                showOperationStatus('success', 'Friends Loaded', 
+                    `Successfully loaded ${data.total_friends} friends`);
+            } else {
+                showMessage('friendsMessage', 'error', data.error || 'Failed to load friends');
+            }
+        } catch (error) {
+            console.error('Load friends error:', error);
+            showMessage('friendsMessage', 'error', 
+                `Network error: ${error.message}. Please check server connection.`);
+        } finally {
+            btn.disabled = false;
+            loading.style.display = 'none';
+        }
+    }
+    
+    // ====== PROCESS FRIEND ACTION ======
+    async function processFriendAction() {
+        const friendUid = document.getElementById('friendUid').value.trim();
+        const actionType = document.getElementById('actionType').value;
+        
+        if (!friendUid) {
+            showMessage('processMessage', 'error', 'Please enter friend UID');
+            return;
+        }
+        
+        if (!currentJWT) {
+            showMessage('processMessage', 'error', 'Please authenticate first');
+            return;
+        }
+        
+        const btn = document.getElementById('processBtn');
+        const loading = document.getElementById('processLoading');
+        const message = document.getElementById('processMessage');
+        const results = document.getElementById('processResults');
+        
+        btn.disabled = true;
+        loading.style.display = 'block';
+        message.style.display = 'none';
+        results.style.display = 'none';
+        
+        try {
+            // First get player info
+            const playerInfo = await getPlayerInfo(friendUid);
+            
+            const baseUrl = window.location.origin;
+            const endpoint = actionType === 'add' ? '/adding_friend' : '/remove_friend';
+            const response = await fetch(
+                `${baseUrl}${endpoint}?token=${encodeURIComponent(currentJWT)}&friend_uid=${friendUid}`
+            );
+            
+            if (!response.ok) {
+                throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                showMessage('processMessage', 'success', data.message);
+                
+                // Display player info
+                displayPlayerInfo('processAccountInfo', playerInfo, data);
+                results.style.display = 'block';
+                
+                showOperationStatus('success', 
+                    actionType === 'add' ? 'Friend Request Sent' : 'Friend Removed',
+                    data.message);
+                
+                // Clear input
+                document.getElementById('friendUid').value = '';
+                
+                // If on friends tab and action was remove, refresh friends list
+                if (actionType === 'remove' && document.querySelector('.tab-btn[data-tab="friends"]').classList.contains('active')) {
+                    setTimeout(() => {
+                        loadFriends();
+                    }, 1500);
+                }
+            } else {
+                showMessage('processMessage', 'error', data.error || 'Action failed');
+                showOperationStatus('error', 'Action Failed', data.error || 'Action failed');
+            }
+        } catch (error) {
+            console.error('Process friend action error:', error);
+            showMessage('processMessage', 'error', 
+                `Network error: ${error.message}. Please check your connection.`);
+            showOperationStatus('error', 'Network Error', 'Please check your connection.');
+        } finally {
+            btn.disabled = false;
+            loading.style.display = 'none';
+        }
+    }
+    
+    // ====== REMOVE FRIEND FROM LIST ======
+    async function removeFriend(friendUid, friendName) {
+        if (!confirm(`Remove "${friendName}" (UID: ${friendUid}) from your friends?`)) {
+            return;
+        }
+        
+        showOperationStatus('processing', 'Removing Friend', `Removing ${friendName}...`);
+        
+        try {
+            // First get player info
+            const playerInfo = await getPlayerInfo(friendUid);
+            
+            const baseUrl = window.location.origin;
+            const response = await fetch(
+                `${baseUrl}/remove_friend?token=${encodeURIComponent(currentJWT)}&friend_uid=${friendUid}`
+            );
+            
+            if (!response.ok) {
+                throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                showOperationStatus('success', 'Friend Removed', data.message);
+                
+                // Remove from current list
+                currentFriends = currentFriends.filter(friend => friend.uid != friendUid);
+                
+                // Refresh display
+                displayFriendsList(currentFriends);
+                
+                // Update count
+                document.getElementById('friendsCountValue').textContent = currentFriends.length;
+                
+                // Display player info in friends tab
+                displayPlayerInfo('friendsAccountInfo', playerInfo, data);
+            } else {
+                showOperationStatus('error', 'Remove Failed', data.error || 'Failed to remove friend');
+            }
+        } catch (error) {
+            console.error('Remove friend error:', error);
+            showOperationStatus('error', 'Network Error', 'Please check your connection.');
+        }
+    }
+    
+    // ====== DISPLAY ACCOUNT INFO ======
+    function displayAccountInfo(containerId, data) {
+        const container = document.getElementById(containerId);
+        
+        // Get platform name
+        const platformName = data.platform_name || (PLATFORM_MAP[data.platform] ? PLATFORM_MAP[data.platform].name : `Platform ${data.platform}`);
+        
+        // Get region name
+        const regionKey = (data.region || '').toUpperCase();
+        const regionName = data.region_name || (REGION_CONFIGS[regionKey] ? REGION_CONFIGS[regionKey].name : data.region || 'Unknown');
+        
+        container.innerHTML = `
+            <div class="info-card">
+                <div class="info-label">
+                    <i class="fas fa-id-card"></i> Your UID
+                </div>
+                <div class="info-value">${data.your_uid || 'N/A'}</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">
+                    <i class="fas fa-user-tag"></i> Nickname
+                </div>
+                <div class="info-value">${data.nickname || 'Unknown'}</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">
+                    <i class="fas fa-globe"></i> Region
+                </div>
+                <div class="info-value">${regionKey}</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">
+                    <i class="fas fa-laptop"></i> Platform
+                </div>
+                <div class="info-value">${platformName}</div>
+            </div>
+        `;
+    }
+    
+    // ====== DISPLAY PLAYER INFO ======
+    function displayPlayerInfo(containerId, playerData, actionData = null) {
+        const container = document.getElementById(containerId);
+        
+        if (!playerData || !playerData.success) {
+            // Show basic info from action data
+            container.innerHTML = `
+                <div class="info-card">
+                    <div class="info-label">
+                        <i class="fas fa-id-card"></i> Target UID
+                    </div>
+                    <div class="info-value">${actionData?.target_uid || 'Unknown'}</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">
+                        <i class="fas fa-user-tag"></i> Action Status
+                    </div>
+                    <div class="info-value">${actionData?.status || 'Unknown'}</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">
+                        <i class="fas fa-server"></i> Server
+                    </div>
+                    <div class="info-value">${actionData?.server || 'Unknown'}</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">
+                        <i class="fas fa-clock"></i> Time
+                    </div>
+                    <div class="info-value">${actionData?.time || new Date().toLocaleString()}</div>
+                </div>
+            `;
+            return;
+        }
+        
+        // Show detailed player info
+        container.innerHTML = `
+            <div class="info-card">
+                <div class="info-label">
+                    <i class="fas fa-id-card"></i> UID
+                </div>
+                <div class="info-value">${playerData.uid || 'N/A'}</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">
+                    <i class="fas fa-user-tag"></i> Nickname
+                </div>
+                <div class="info-value">${playerData.nickname || 'Unknown'}</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">
+                    <i class="fas fa-level-up-alt"></i> Level
+                </div>
+                <div class="info-value">${playerData.level || 0}</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">
+                    <i class="fas fa-heart"></i> Likes
+                </div>
+                <div class="info-value">${playerData.likes || 0}</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">
+                    <i class="fas fa-globe"></i> Region
+                </div>
+                <div class="info-value">${playerData.region || 'Unknown'}</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">
+                    <i class="fas fa-gamepad"></i> Total Matches
+                </div>
+                <div class="info-value">${playerData.total_matches || 0}</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">
+                    <i class="fas fa-trophy"></i> Wins
+                </div>
+                <div class="info-value">${playerData.wins || 0}</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">
+                    <i class="fas fa-crown"></i> Rank
+                </div>
+                <div class="info-value">${playerData.rank || 0}</div>
+            </div>
+        `;
+    }
+    
+    // ====== DISPLAY FRIENDS LIST ======
+    function displayFriendsList(friends) {
+        const container = document.getElementById('friendsList');
+        const noFriends = document.getElementById('noFriends');
+        
+        if (friends && friends.length > 0) {
+            container.innerHTML = friends.map(friend => `
+                <div class="friend-card">
+                    <div class="friend-header">
+                        <div class="friend-uid">${friend.uid}</div>
+                    </div>
+                    <div class="friend-name">${friend.nickname}</div>
+                    <div class="friend-actions">
+                        <button class="friend-action-btn btn-danger" 
+                                onclick="removeFriend('${friend.uid}', '${friend.nickname}')">
+                            <i class="fas fa-trash"></i> REMOVE
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            container.style.display = 'grid';
+            noFriends.style.display = 'none';
+        } else {
+            container.style.display = 'none';
+            noFriends.style.display = 'block';
+        }
+    }
+    
+    // ====== SHOW MESSAGE ======
+    function showMessage(containerId, type, message) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}`;
+        container.className = `message ${type}`;
+        container.style.display = 'block';
+        
+        // Auto-hide success messages after 5 seconds
+        if (type === 'success') {
+            setTimeout(() => {
+                container.style.display = 'none';
+            }, 5000);
+        }
+    }
+    
+    // ====== SHOW OPERATION STATUS ======
+    function showOperationStatus(type, title, message) {
+        const statusDiv = document.getElementById('operationStatus');
+        const statusClass = {
+            'success': 'status-success',
+            'error': 'status-error',
+            'processing': 'status-processing'
+        }[type] || 'status-processing';
+        
+        statusDiv.innerHTML = `
+            <div class="status-card ${statusClass}">
+                <div class="status-title">
+                    ${type === 'success' ? '✅' : type === 'error' ? '❌' : '🔄'} ${title}
+                </div>
+                <div class="status-message">${message}</div>
+            </div>
+        `;
+        
+        statusDiv.style.display = 'block';
+        
+        // Auto-hide after 5 seconds for success/error
+        if (type !== 'processing') {
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 5000);
+        }
+    }
+    
+    // ====== CLEAR ALL ======
+    function clearAll() {
+        currentJWT = null;
+        currentUserInfo = null;
+        currentFriends = [];
+        
+        document.getElementById('userToken').value = '';
+        document.getElementById('friendUid').value = '';
+        document.getElementById('tokenMessage').style.display = 'none';
+        document.getElementById('processMessage').style.display = 'none';
+        document.getElementById('friendsMessage').style.display = 'none';
+        document.getElementById('processResults').style.display = 'none';
+        document.getElementById('friendsResults').style.display = 'none';
+        
+        showOperationStatus('info', 'Cleared', 'All data has been cleared. Please authenticate again.');
+    }
+</script>
+</body>
+</html>
